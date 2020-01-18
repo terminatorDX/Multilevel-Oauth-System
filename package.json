@@ -1,0 +1,43 @@
+{
+    "name": "backend-oauth",
+    "version": "1.0.0",
+    "description": "",
+    "main": "index.js",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "start": "node server.js",
+        "server": "node server.js",
+        "client": "npm run start --prefix client",
+        "dev": "concurrently \"npm run server\" \"npm run client\""
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://thehitechpanky@bitbucket.org/skcca/skcca-backend.git"
+    },
+    "husky": {
+        "hooks": {
+            "pre-commit": "pretty-quick --staged"
+        }
+    },
+    "keywords": [],
+    "author": "",
+    "license": "ISC",
+    "homepage": "https://bitbucket.org/skcca/skcca-backend#readme",
+    "dependencies": {
+        "@types/react-tabs": "^2.3.1",
+        "bcryptjs": "^2.4.3",
+        "body-parser": "^1.19.0",
+        "concurrently": "^5.0.2",
+        "cookie-parser": "^1.4.4",
+        "cors": "^2.8.5",
+        "express": "^4.17.1",
+        "express-session": "^1.17.0",
+        "http-proxy-middleware": "^0.20.0",
+        "mongoose": "^5.8.9",
+        "passport": "^0.4.1"
+    },
+    "devDependencies": {
+        "husky": "^4.0.10",
+        "prettier": "^1.19.1"
+    }
+}
