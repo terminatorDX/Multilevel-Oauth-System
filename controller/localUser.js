@@ -5,7 +5,6 @@ const Router = require("express").Router(),
 // salt = bcrypt.genSaltSync(10);
 
 Router.post("/signup", (req, res) => {
-    console.log("--------------------------------------------------------");
     let errors = [];
     const { body } = req;
     let { name } = body;
@@ -45,6 +44,8 @@ Router.post("/signup", (req, res) => {
                             message: "Error: Server error"
                         });
                     }
+
+                    req.session.user = user;
                     req.session.localUser = user;
                     return res.send({
                         success: true,
@@ -57,23 +58,43 @@ Router.post("/signup", (req, res) => {
 
 Router.post("/login", (req, res) => {
     let errors = [];
+    const { body } = req;
+    let { name } = body;
+    const { password } = body;
     User.find({
-        username: req.body.username
+        name: name
     })
         .then(user => {
             let userExists = user;
             if (
-                userExists
+                userExists &&
+                password === user.password
                 //  && bcrypt.compareSync(req.body.password, user.password) === true
             ) {
                 req.session.user = user;
+                req.session.localUser = user;
+                return res.send({
+                    success: true,
+                    message: "logged in"
+                });
             } else {
-                errors.push("could not log in");
+                errors.push("username or password is not correct");
+                if (err) {
+                    console.log(err);
+                    return res.send({
+                        success: false,
+                        message: "username or password is not correct"
+                    });
+                }
             }
         })
         .catch(err => {
             errors.push("user does not exist");
             console.log(err);
+            return res.send({
+                success: false,
+                message: "user does not exist"
+            });
         });
 });
 

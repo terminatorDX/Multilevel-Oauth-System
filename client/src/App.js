@@ -4,12 +4,14 @@ import "bootstrap/dist/css/bootstrap.min.css";
 import "./App.css";
 import Admin from "./layouts/Admin";
 import NotFound from "./components/NotFound";
+import Dashboard from "./views/Dashboard";
 function App() {
     return (
         <React.Fragment>
             <Switch>
+                <Route path="/" component={Dashboard} />
                 <Route path="/admin" render={props => <Admin {...props} />} />
-                <Redirect from="/" to="/admin/dashboard" />
+                {/* <Redirect from="/" to="/admin/dashboard" /> */}
                 <Route component={NotFound} />
             </Switch>
         </React.Fragment>

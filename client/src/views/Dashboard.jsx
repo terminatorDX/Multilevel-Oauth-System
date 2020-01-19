@@ -6,16 +6,23 @@ export default class Dashboard extends Component {
         super(props);
         this.state = {
             isLoading: true,
-            isSigning: false
+            isSigning: true,
+            isTeacher: false
         };
+        this.logsign = this.logsign.bind(this);
     }
+
     componentDidMount() {
         this.setState({
             isLoading: false
         });
     }
+    logsign() {
+        const { isSigning } = this.state;
+        this.setState({ isSigning: !isSigning });
+    }
     render() {
-        const { isLoading, isSigning } = this.state;
+        const { isLoading, isSigning, isTeacher } = this.state;
         if (isLoading) {
             return (
                 <div>
@@ -26,8 +33,17 @@ export default class Dashboard extends Component {
         return (
             <div className="container mx-5">
                 <h1 className="mx-auto">Wich one do you wanna choose??</h1>
-                <Signup />
-                <Login />
+                <button className="btn btn-primary" onClick={this.logsign}>
+                    {isSigning ? "Login" : "Signin"}
+                </button>
+                <div className="main">
+                    {isSigning ? (
+                        <Login isTeacher={isTeacher} />
+                    ) : (
+                        <Signup isTeacher={isTeacher} />
+                    )}
+                </div>
+
                 <br />
             </div>
         );

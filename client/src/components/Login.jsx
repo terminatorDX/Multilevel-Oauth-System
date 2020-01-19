@@ -4,13 +4,13 @@ const route = "http://localhost:4000";
 export default class Student extends Component {
     constructor(props) {
         super(props);
-
         this.state = {
             isLoading: true,
             logInError: "",
             logInName: "",
             logInPassword: "",
-            error: []
+            error: [],
+            selectedOption: ""
         };
         this.onTextboxChangeLogInName = this.onTextboxChangeLogInName.bind(
             this
@@ -18,6 +18,7 @@ export default class Student extends Component {
         this.onTextboxChangeLogInPassword = this.onTextboxChangeLogInPassword.bind(
             this
         );
+        this.setProfession = this.setProfession.bind(this);
         this.onLogIn = this.onLogIn.bind(this);
     }
     componentDidMount() {
@@ -25,7 +26,6 @@ export default class Student extends Component {
             isLoading: false
         });
     }
-
     onTextboxChangeLogInPassword(event) {
         this.setState({
             logInPassword: event.target.value
@@ -36,16 +36,20 @@ export default class Student extends Component {
             logInName: event.target.value
         });
     }
+    setProfession(event) {
+        console.log(event.target.value);
+        this.setState({
+            setProfession: event.target.value
+        });
+    }
 
     onLogIn() {
-        // Grab state
-        const { logInName, logInPassword } = this.state;
-
-        if (!logInName || !logInPassword) {
-            alert("Hello! I am an alert box!!");
+        const { logInName, logInPassword, selectedOption } = this.state;
+        if (!logInName || !logInPassword || selectedOption) {
+            alert("Please fill out the form");
             return;
         }
-        console.log(logInName, logInPassword);
+        console.log(logInName, logInPassword, selectedOption);
         // Post request to backend
         fetch(`${route}/api/account/login`, {
             method: "POST",
@@ -54,7 +58,8 @@ export default class Student extends Component {
             },
             body: JSON.stringify({
                 name: logInName,
-                password: logInPassword
+                password: logInPassword,
+                selectedOption: selectedOption
             })
         })
             .then(res => res.json())
@@ -65,7 +70,8 @@ export default class Student extends Component {
                         logInError: json.message,
                         isLoading: false,
                         logInName: "",
-                        logInPassword: ""
+                        logInPassword: "",
+                        selectedOption: ""
                     });
                 } else {
                     this.setState({
@@ -76,7 +82,12 @@ export default class Student extends Component {
             });
     }
     render() {
-        const { isLoading, logInName, logInPassword } = this.state;
+        const {
+            isLoading,
+            logInName,
+            logInPassword,
+            selectedOption
+        } = this.state;
         if (isLoading) {
             return (
                 <div>
@@ -115,24 +126,27 @@ export default class Student extends Component {
                                         className="px-4"
                                     />
                                 </div>
-                                <div className="form-group">
-                                    <input
-                                        type="checkbox"
-                                        name="agree-term"
-                                        id="agree-term"
-                                        className="agree-term"
-                                    />
-                                    <label
-                                        htmlFor="agree-term"
-                                        className="label-agree-term">
-                                        <span>
-                                            <span />
-                                        </span>
-                                        I agree all statements in{" "}
-                                        <strong className="term-service">
-                                            Terms of service
-                                        </strong>
-                                    </label>
+                                <div
+                                    className="form-group"
+                                    onChange={this.setProfession}>
+                                    <div className="form-check">
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="Teacher"
+                                            value={"student"}
+                                        />
+                                        Student
+                                    </div>
+                                    <div className="form-check">
+                                        <input
+                                            type="radio"
+                                            className="form-check-input"
+                                            name="Teacher"
+                                            value={"teacher"}
+                                        />
+                                        Teacher
+                                    </div>
                                 </div>
                                 <div className="form-group form-button">
                                     <button
@@ -141,7 +155,7 @@ export default class Student extends Component {
                                         id="login"
                                         onClick={this.onLogIn}
                                         className="form-submit">
-                                        Submit
+                                        Log In
                                     </button>
                                 </div>
                             </form>

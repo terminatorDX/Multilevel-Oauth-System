@@ -26,11 +26,7 @@ class Admin extends Component {
     };
 
     render() {
-        return (
-            <div className="main">
-                <Switch>{this.getRoutes(routes)}</Switch>
-            </div>
-        );
+        return <Switch>{this.getRoutes(routes)}</Switch>;
     }
 }
 
