@@ -11,7 +11,7 @@ export default class Student extends Component {
             signUpName: "",
             signUpPassword: "",
             signUpPassword2: "",
-            selectedOption: ""
+            isTeacher: false
         };
         this.onTextboxChangeSignUpName = this.onTextboxChangeSignUpName.bind(
             this
@@ -22,7 +22,7 @@ export default class Student extends Component {
         this.onTextboxChangeSignUpPassword2 = this.onTextboxChangeSignUpPassword2.bind(
             this
         );
-        this.setProfession = this.setProfession.bind(this);
+        this.isTeacher = this.isTeacher.bind(this);
         this.onSignUp = this.onSignUp.bind(this);
     }
     componentDidMount() {
@@ -46,20 +46,20 @@ export default class Student extends Component {
             signUpName: event.target.value
         });
     }
-    setProfession(event) {
-        console.log(event.target.value);
+    isTeacher() {
         this.setState({
-            setProfession: event.target.value
+            isTeacher: !this.state.isTeacher
         });
     }
 
-    onSignUp() {
-        // Grab state
+    onSignUp(event) {
+        event.preventDefault();
         const {
             signUpName,
             signUpPassword,
             signUpPassword2,
-            selectedOption
+            selectedOption,
+            isTeacher
         } = this.state;
 
         if (
@@ -73,12 +73,7 @@ export default class Student extends Component {
             console.warn("fill out all the forms");
             return;
         }
-        console.log(
-            signUpName,
-            signUpPassword,
-            signUpPassword2,
-            selectedOption
-        );
+        console.log(signUpName, signUpPassword, signUpPassword2, isTeacher);
         // Post request to backend
         fetch(`${route}/api/account/signup`, {
             method: "POST",
@@ -88,7 +83,7 @@ export default class Student extends Component {
             body: JSON.stringify({
                 name: signUpName,
                 password: signUpPassword,
-                selectedOption: selectedOption
+                isTeacher: isTeacher
             })
         })
             .then(res => res.json())
@@ -113,7 +108,8 @@ export default class Student extends Component {
             signUpName,
             signUpPassword,
             signUpPassword2,
-            signUpError
+            signUpError,
+            isTeacher
         } = this.state;
         if (isLoading) {
             return (
@@ -131,7 +127,10 @@ export default class Student extends Component {
                             <h3 className="m-auto text-danger">
                                 {signUpError ? { signUpError } : null}
                             </h3>
-                            <form className="register-form" id="register-form">
+                            <form
+                                className="register-form"
+                                id="register-form"
+                                onSubmit={this.onSignUp}>
                                 <div className="form-group">
                                     <input
                                         type="text"
@@ -171,36 +170,24 @@ export default class Student extends Component {
                                         className="px-4"
                                     />
                                 </div>
-                                <div
-                                    className="form-group"
-                                    onChange={this.setProfession}>
-                                    <div className="form-check">
-                                        <input
-                                            type="radio"
-                                            className="form-check-input"
-                                            name="Teacher"
-                                            value={"student"}
-                                        />
-                                        Student
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            type="radio"
-                                            className="form-check-input"
-                                            name="Teacher"
-                                            value={"teacher"}
-                                        />
-                                        Teacher
-                                    </div>
+                                <div className="form-group form-button">
+                                    <p className="lead my-auto">Are You a ?</p>
+                                    <button
+                                        type="button"
+                                        name="isTeacher"
+                                        id="isTeacher"
+                                        onClick={this.isTeacher}
+                                        className="form-submit">
+                                        {isTeacher ? "Teacher" : "Student"}
+                                    </button>
                                 </div>
                                 <div className="form-group form-button">
                                     <button
                                         type="submit"
                                         name="signup"
                                         id="signup"
-                                        onClick={this.onSignUp}
-                                        className="form-submit">
-                                        Submit
+                                        className="btn btn-inline">
+                                        Sign Up
                                     </button>
                                 </div>
                             </form>
@@ -208,7 +195,7 @@ export default class Student extends Component {
                         <div className="signup-image">
                             <figure>
                                 <img
-                                    src="images/signin-image.jpg"
+                                    src="images/signup-image.jpg"
                                     alt="visual for signup.js"
                                 />
                             </figure>

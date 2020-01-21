@@ -10,8 +10,9 @@ Router.post("/signup", (req, res) => {
     const { body } = req;
     let { name } = body;
     const { password } = body;
+    const { isTeacher } = body;
     let usernameAlreadyChosen = false;
-    console.log("value recieved at /signup :", name, password);
+    console.log("value recieved at /signup :", name, password, isTeacher);
     User.findOne({ name: name })
         .then(user => {
             if (user) {
@@ -40,6 +41,7 @@ Router.post("/signup", (req, res) => {
             let newuser = new User();
             newuser.name = name;
             newuser.password = password;
+            newuser.isTeacher = isTeacher;
             console.log("newuser : ", newuser);
             newuser.save((err, user) => {
                 if (err) {

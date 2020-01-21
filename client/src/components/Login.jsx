@@ -36,7 +36,8 @@ export default class Student extends Component {
         });
     }
 
-    onLogIn() {
+    onLogIn(e) {
+        e.preventDefault();
         const { logInName, logInPassword } = this.state;
         if (!logInName || !logInPassword) {
             alert("Please fill out the form");
@@ -99,7 +100,10 @@ export default class Student extends Component {
                             <h3 className="m-auto text-danger">
                                 {logInError ? { logInError } : null}
                             </h3>
-                            <form className="register-form" id="register-form">
+                            <form
+                                className="register-form"
+                                id="register-form"
+                                onSubmit={this.onLogIn}>
                                 <div className="form-group">
                                     <input
                                         type="text"
@@ -129,7 +133,6 @@ export default class Student extends Component {
                                         type="submit"
                                         name="login"
                                         id="login"
-                                        onClick={this.onLogIn}
                                         className="form-submit">
                                         Log In
                                     </button>
@@ -139,7 +142,7 @@ export default class Student extends Component {
                         <div className="signup-image">
                             <figure>
                                 <img
-                                    src="images/login-image.jpg"
+                                    src="images/signin-image.jpg"
                                     alt="visual for login.js"
                                 />
                             </figure>
