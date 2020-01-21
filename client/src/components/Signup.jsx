@@ -11,7 +11,6 @@ export default class Student extends Component {
             signUpName: "",
             signUpPassword: "",
             signUpPassword2: "",
-            error: [],
             selectedOption: ""
         };
         this.onTextboxChangeSignUpName = this.onTextboxChangeSignUpName.bind(
@@ -71,6 +70,7 @@ export default class Student extends Component {
             signUpPassword2 !== signUpPassword
         ) {
             alert("Please fill out the form");
+            console.warn("fill out all the forms");
             return;
         }
         console.log(

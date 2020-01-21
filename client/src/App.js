@@ -11,7 +11,7 @@ function App() {
             <Switch>
                 <Route path="/" component={Dashboard} />
                 <Route path="/admin" render={props => <Admin {...props} />} />
-                {/* <Redirect from="/" to="/admin/dashboard" /> */}
+                <Redirect from="/admin" to="/admin/dashboard" />
                 <Route component={NotFound} />
             </Switch>
         </React.Fragment>

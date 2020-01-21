@@ -58,46 +58,51 @@ Router.post("/signup", (req, res) => {
 });
 
 Router.post("/login", (req, res) => {
-    let errors = [];
+    let errors = "";
     const { body } = req;
     let { name } = body;
     const { password } = body;
-    let userExists = false;
+    console.log("values recieved at /login : ", name, password);
     User.find({
         name: name
     })
         .then((user, err) => {
             userExists = true;
-            console.log("newuser at login : ", user);
+            console.log("user found :", user);
             if (err) {
-                console.log(err);
                 errors = "Error : server error";
+                console.warn(errors);
                 return res.send({
                     success: false,
                     message: errors
                 });
             }
-            if (!userExists || password !== user.password) {
-                errors = "password is not correct";
-                return res.send({
-                    success: false,
-                    message: errors
-                });
-            }
+            // if (password === user.password) {
             // Otherwise correct user
             const userSession = new UserSession();
             userSession.userId = user._id;
+            console.log("newusersession at login : ", userSession);
             req.session.user = user;
             req.session.localUser = user;
-            return res.send({
-                success: true,
-                message: "Valid sign in",
-                token: doc._id
+            userSession.save((err, doc) => {
+                if (err) {
+                    console.log(err);
+                    return res.send({
+                        success: false,
+                        message: "Error: server error"
+                    });
+                }
+                errors = "";
+                return res.send({
+                    success: true,
+                    message: "Valid sign in",
+                    token: doc._id
+                });
             });
         })
         .catch(err => {
             errors = "user does not exist";
-            console.log(err);
+            console.warn(err);
             return res.send({
                 success: false,
                 message: errors

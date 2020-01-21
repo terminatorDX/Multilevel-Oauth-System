@@ -10,8 +10,7 @@ export default class Student extends Component {
             logInError: "",
             logInName: "",
             logInPassword: "",
-            token: "",
-            setProfession: ""
+            token: ""
         };
         this.onTextboxChangeLogInName = this.onTextboxChangeLogInName.bind(
             this
@@ -19,7 +18,6 @@ export default class Student extends Component {
         this.onTextboxChangeLogInPassword = this.onTextboxChangeLogInPassword.bind(
             this
         );
-        this.setProfession = this.setProfession.bind(this);
         this.onLogIn = this.onLogIn.bind(this);
     }
     componentDidMount() {
@@ -37,20 +35,14 @@ export default class Student extends Component {
             logInName: event.target.value
         });
     }
-    setProfession(event) {
-        console.log(event.target.value);
-        this.setState({
-            setProfession: event.target.value
-        });
-    }
 
     onLogIn() {
-        const { logInName, logInPassword, selectedOption } = this.state;
-        if (!logInName || !logInPassword || selectedOption) {
+        const { logInName, logInPassword } = this.state;
+        if (!logInName || !logInPassword) {
             alert("Please fill out the form");
             return;
         }
-        console.log(logInName, logInPassword, selectedOption);
+        console.log(logInName, logInPassword);
         // Post request to backend
         fetch(`${route}/api/account/login`, {
             method: "POST",
@@ -59,8 +51,7 @@ export default class Student extends Component {
             },
             body: JSON.stringify({
                 name: logInName,
-                password: logInPassword,
-                selectedOption: selectedOption
+                password: logInPassword
             })
         })
             .then(res => res.json())
@@ -132,28 +123,6 @@ export default class Student extends Component {
                                         placeholder="Password"
                                         className="px-4"
                                     />
-                                </div>
-                                <div
-                                    className="form-group"
-                                    onChange={this.setProfession}>
-                                    <div className="form-check">
-                                        <input
-                                            type="radio"
-                                            className="form-check-input"
-                                            name="Teacher"
-                                            value={"student"}
-                                        />
-                                        Student
-                                    </div>
-                                    <div className="form-check">
-                                        <input
-                                            type="radio"
-                                            className="form-check-input"
-                                            name="Teacher"
-                                            value={"teacher"}
-                                        />
-                                        Teacher
-                                    </div>
                                 </div>
                                 <div className="form-group form-button">
                                     <button
