@@ -93,15 +93,11 @@ export default class Student extends Component {
         })
             .then(res => res.json())
             .then(json => {
-                console.log("json", json);
+                console.log("json", json); //json is the object that is returned
                 if (json.success) {
                     this.setState({
                         signUpError: json.message,
-                        isLoading: false,
-                        signUpName: "",
-                        signUpPassword: "",
-                        signUpPassword2: "",
-                        selectedOption: ""
+                        isLoading: false
                     });
                 } else {
                     this.setState({
@@ -116,7 +112,8 @@ export default class Student extends Component {
             isLoading,
             signUpName,
             signUpPassword,
-            signUpPassword2
+            signUpPassword2,
+            signUpError
         } = this.state;
         if (isLoading) {
             return (
@@ -131,17 +128,20 @@ export default class Student extends Component {
                     <div className="signup-content">
                         <div className="signup-form">
                             <h2 className="form-title">Sign up</h2>
+                            <h3 className="m-auto text-danger">
+                                {signUpError ? { signUpError } : null}
+                            </h3>
                             <form className="register-form" id="register-form">
                                 <div className="form-group">
                                     <input
-                                        type="email"
+                                        type="text"
                                         value={signUpName}
                                         onChange={
                                             this.onTextboxChangeSignUpName
                                         }
                                         name="name"
                                         id="name"
-                                        placeholder="Your Email"
+                                        placeholder="Your Name"
                                         className="px-4"
                                     />
                                 </div>

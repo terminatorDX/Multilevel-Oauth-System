@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import { setInStorage } from "../utils/storage";
 const route = "http://localhost:4000";
 
 export default class Student extends Component {
@@ -9,8 +10,8 @@ export default class Student extends Component {
             logInError: "",
             logInName: "",
             logInPassword: "",
-            error: [],
-            selectedOption: ""
+            token: "",
+            setProfession: ""
         };
         this.onTextboxChangeLogInName = this.onTextboxChangeLogInName.bind(
             this
@@ -66,12 +67,11 @@ export default class Student extends Component {
             .then(json => {
                 console.log("json", json);
                 if (json.success) {
+                    setInStorage("the_main_app", { token: json.token });
                     this.setState({
                         logInError: json.message,
                         isLoading: false,
-                        logInName: "",
-                        logInPassword: "",
-                        selectedOption: ""
+                        token: json.token
                     });
                 } else {
                     this.setState({
@@ -86,7 +86,8 @@ export default class Student extends Component {
             isLoading,
             logInName,
             logInPassword,
-            selectedOption
+            logInError,
+            token
         } = this.state;
         if (isLoading) {
             return (
@@ -95,21 +96,27 @@ export default class Student extends Component {
                 </div>
             );
         }
+        if (token) {
+            return <div className="bg-dark text-white">{token}</div>;
+        }
         return (
             <section className="login" id="sign-up">
                 <div className="container">
                     <div className="login-content">
                         <div className="login-form">
-                            <h2 className="form-title">Sign up</h2>
+                            <h2 className="form-title">Log in</h2>
+                            <h3 className="m-auto text-danger">
+                                {logInError ? { logInError } : null}
+                            </h3>
                             <form className="register-form" id="register-form">
                                 <div className="form-group">
                                     <input
-                                        type="email"
+                                        type="text"
                                         value={logInName}
                                         onChange={this.onTextboxChangeLogInName}
                                         name="name"
                                         id="name"
-                                        placeholder="Your Email"
+                                        placeholder="Your Name"
                                         className="px-4"
                                     />
                                 </div>

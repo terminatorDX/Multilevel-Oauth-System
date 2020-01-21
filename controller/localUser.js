@@ -1,58 +1,59 @@
 // localhost:4000/api/account/<Route>
 const Router = require("express").Router(),
-    User = require("../models/User");
+    User = require("../models/User"),
+    UserSession = require("../models/UserSession");
 // bcrypt = require("bcrypt"),
 // salt = bcrypt.genSaltSync(10);
 
 Router.post("/signup", (req, res) => {
-    let errors = [];
+    let errors = "";
     const { body } = req;
     let { name } = body;
     const { password } = body;
     let usernameAlreadyChosen = false;
-    console.log(name, password);
+    console.log("value recieved at /signup :", name, password);
     User.findOne({ name: name })
         .then(user => {
             if (user) {
                 usernameAlreadyChosen = true;
-                errors.push("name", req.body.name, "is already in use");
+                errors = `name : ${req.body.name} is already in use`;
                 if (err) {
                     return res.send({
                         success: false,
                         message: "Error: Server error"
                     });
-                } else {
-                    return res.send({
-                        success: false,
-                        message: "Error: Account already exist."
-                    });
                 }
-            }
-        }) //end of then
-        .then(() => {
-            if (errors.length > 0 || usernameAlreadyChosen) {
-                console.log("errors: ", errors);
-            } else {
-                let newuser = new User();
-                newuser.name = name;
-                newuser.password = password; //bcrypt.hashSync(password, salt);
-                newuser.save((err, user) => {
-                    if (err) {
-                        console.warn("error in signup redirect");
-                        return res.send({
-                            success: false,
-                            message: "Error: Server error"
-                        });
-                    }
-
-                    req.session.user = user;
-                    req.session.localUser = user;
-                    return res.send({
-                        success: true,
-                        message: "Signed up"
-                    });
+                return res.send({
+                    success: false,
+                    message: errors
                 });
             }
+        })
+        .then(() => {
+            if (errors || usernameAlreadyChosen) {
+                console.log("errors: ", errors);
+                return res.send({
+                    success: false,
+                    message: errors
+                });
+            }
+            let newuser = new User();
+            newuser.name = name;
+            newuser.password = password;
+            console.log("newuser : ", newuser);
+            newuser.save((err, user) => {
+                if (err) {
+                    errors = "error in signup redirect";
+                    return res.send({
+                        success: false,
+                        message: errors
+                    });
+                }
+                return res.send({
+                    success: true,
+                    message: "Signed up"
+                });
+            });
         }); //end of then
 });
 
@@ -61,39 +62,45 @@ Router.post("/login", (req, res) => {
     const { body } = req;
     let { name } = body;
     const { password } = body;
+    let userExists = false;
     User.find({
         name: name
     })
-        .then(user => {
-            let userExists = user;
-            if (
-                userExists &&
-                password === user.password
-                //  && bcrypt.compareSync(req.body.password, user.password) === true
-            ) {
-                req.session.user = user;
-                req.session.localUser = user;
+        .then((user, err) => {
+            userExists = true;
+            console.log("newuser at login : ", user);
+            if (err) {
+                console.log(err);
+                errors = "Error : server error";
                 return res.send({
-                    success: true,
-                    message: "logged in"
+                    success: false,
+                    message: errors
                 });
-            } else {
-                errors.push("username or password is not correct");
-                if (err) {
-                    console.log(err);
-                    return res.send({
-                        success: false,
-                        message: "username or password is not correct"
-                    });
-                }
             }
+            if (!userExists || password !== user.password) {
+                errors = "password is not correct";
+                return res.send({
+                    success: false,
+                    message: errors
+                });
+            }
+            // Otherwise correct user
+            const userSession = new UserSession();
+            userSession.userId = user._id;
+            req.session.user = user;
+            req.session.localUser = user;
+            return res.send({
+                success: true,
+                message: "Valid sign in",
+                token: doc._id
+            });
         })
         .catch(err => {
-            errors.push("user does not exist");
+            errors = "user does not exist";
             console.log(err);
             return res.send({
                 success: false,
-                message: "user does not exist"
+                message: errors
             });
         });
 });
@@ -114,9 +121,10 @@ Router.get("/logout", (req, res) => {
         (err, sessions) => {
             if (err) {
                 console.log(err);
+                error = "Error: Server error";
                 return res.send({
                     success: false,
-                    message: "Error: Server error"
+                    message: error
                 });
             }
         }
