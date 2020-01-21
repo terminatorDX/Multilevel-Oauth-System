@@ -58,23 +58,23 @@ export default class Student extends Component {
             signUpName,
             signUpPassword,
             signUpPassword2,
-            selectedOption,
-            isTeacher
+            isTeacher,
+            signUpError
         } = this.state;
-
         if (
             !signUpName ||
             !signUpPassword ||
             !signUpPassword2 ||
-            selectedOption ||
             signUpPassword2 !== signUpPassword
         ) {
-            alert("Please fill out the form");
-            console.warn("fill out all the forms");
+            // this.state.signUpError.push[];
+            this.setState({
+                signUpError: "fill out all the forms"
+            });
+            console.warn(" all the forms are not filled");
             return;
         }
         console.log(signUpName, signUpPassword, signUpPassword2, isTeacher);
-        // Post request to backend
         fetch(`${route}/api/account/signup`, {
             method: "POST",
             headers: {
