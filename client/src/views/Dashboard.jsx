@@ -7,7 +7,7 @@ export default class Dashboard extends Component {
         this.state = {
             isLoading: true,
             isSigning: true,
-            isTeacher: false
+             isTeacher: false
         };
         this.logsign = this.logsign.bind(this);
     }
