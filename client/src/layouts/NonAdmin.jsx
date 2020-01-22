@@ -2,7 +2,7 @@ import React, { Component } from "react";
 import { Route, Switch } from "react-router-dom";
 import routes from "../routes.js"; //TODO: this is bringing different routes in routes.js and sent to index.js
 
-class Admin extends Component {
+class NonAdmin extends Component {
     constructor(props) {
         super(props);
         this.state = {};
@@ -30,4 +30,4 @@ class Admin extends Component {
     }
 }
 
-export default Admin;
+export default NonAdmin;
