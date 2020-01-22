@@ -1,5 +1,12 @@
 {
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.formatOnSave": true,
-    "git.allowForcePush": true
+    "git.allowForcePush": true,
+    "editor.formatOnSaveTimeout": 1000,
+    "workbench.editor.labelFormat": "medium",
+    "html.format.indentInnerHtml": true,
+    "prettier.arrowParens": "always",
+    "prettier.jsxBracketSameLine": true,
+    "prettier.requireConfig": true,
+    "prettier.tabWidth": 4
 }
