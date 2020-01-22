@@ -79,8 +79,6 @@ Router.post("/login", (req, res) => {
                     message: errors
                 });
             }
-            // if (password === user.password) {
-            // Otherwise correct user
             const userSession = new UserSession();
             userSession.userId = user._id;
             console.log("newusersession at login : ", userSession);
@@ -98,7 +96,7 @@ Router.post("/login", (req, res) => {
                 return res.send({
                     success: true,
                     message: "Valid sign in",
-                    token: doc._id
+                    token: user._id
                 });
             });
         })
@@ -142,4 +140,40 @@ Router.get("/logout", (req, res) => {
         }
     });
 });
+
+Router.get("/verify", (req, res, next) => {
+    // Get the token
+    const { query } = req;
+    const { token } = query;
+    console.log("in localuser /verify :", token);
+    // ?token=test
+    // Verify the token is one of a kind and it's not deleted.
+    UserSession.find(
+        {
+            _id: token,
+            isDeleted: false
+        },
+        (err, sessions) => {
+            if (err) {
+                console.log(err);
+                return res.send({
+                    success: false,
+                    message: "Error: Server error"
+                });
+            }
+            if (sessions.length != 1) {
+                return res.send({
+                    success: false,
+                    message: "Error: Invalid"
+                });
+            } else {
+                return res.send({
+                    success: true,
+                    message: "Good"
+                });
+            }
+        }
+    );
+});
+
 module.exports = Router;

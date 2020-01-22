@@ -58,8 +58,7 @@ export default class Student extends Component {
             signUpName,
             signUpPassword,
             signUpPassword2,
-            isTeacher,
-            signUpError
+            isTeacher
         } = this.state;
         if (
             !signUpName ||
@@ -67,10 +66,6 @@ export default class Student extends Component {
             !signUpPassword2 ||
             signUpPassword2 !== signUpPassword
         ) {
-            // this.state.signUpError.push[];
-            this.setState({
-                signUpError: "fill out all the forms"
-            });
             console.warn(" all the forms are not filled");
             return;
         }

@@ -59,7 +59,9 @@ export default class Student extends Component {
             .then(json => {
                 console.log("json", json);
                 if (json.success) {
-                    setInStorage("the_main_app", { token: json.token });
+                    setInStorage("the_main_app", {
+                        token: json.token
+                    });
                     this.setState({
                         logInError: json.message,
                         isLoading: false,
@@ -89,7 +91,11 @@ export default class Student extends Component {
             );
         }
         if (token) {
-            return <div className="bg-dark text-white">{token}</div>;
+            return (
+                <div className="bg-dark text-white">
+                    token in login :{token}
+                </div>
+            );
         }
         return (
             <section className="login" id="sign-up">
@@ -97,9 +103,9 @@ export default class Student extends Component {
                     <div className="login-content">
                         <div className="login-form">
                             <h2 className="form-title">Log in</h2>
-                            <h3 className="m-auto text-danger">
+                            {/* <h3 className="m-auto text-danger">
                                 {logInError ? { logInError } : null}
-                            </h3>
+                            </h3> */}
                             <form
                                 className="register-form"
                                 id="register-form"
