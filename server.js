@@ -25,7 +25,8 @@ app.use(
 
 //mongodb
 mongoose.connect(key.mongodb.MLab, {
-    useNewUrlParser: true
+    useNewUrlParser: true,
+    useUnifiedTopology: true
 });
 const connection = mongoose.connection;
 connection.once("open", function() {

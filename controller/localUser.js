@@ -66,8 +66,8 @@ Router.post("/login", (req, res) => {
     const { password } = body;
     console.log("values recieved at /login : ", name, password);
     User.find({
-        name: name
-    })
+            name: name
+        })
         .then((user, err) => {
             userExists = true;
             console.log("user found :", user);
@@ -92,11 +92,11 @@ Router.post("/login", (req, res) => {
                         message: "Error: server error"
                     });
                 }
-                errors = "";
                 return res.send({
                     success: true,
+                    token: doc._id,
                     message: "Valid sign in",
-                    token: user._id
+                    teacher: req.session.user[0].isTeacher
                 });
             });
         })
@@ -112,12 +112,10 @@ Router.post("/login", (req, res) => {
 
 Router.get("/logout", (req, res) => {
     console.log("logging out : " + user);
-    UserSession.findOneAndUpdate(
-        {
+    UserSession.findOneAndUpdate({
             _id: user.id,
             isDeleted: false
-        },
-        {
+        }, {
             $set: {
                 isDeleted: true
             }
@@ -148,32 +146,39 @@ Router.get("/verify", (req, res, next) => {
     console.log("in localuser /verify :", token);
     // ?token=test
     // Verify the token is one of a kind and it's not deleted.
-    UserSession.find(
-        {
+    User.find({
             _id: token,
             isDeleted: false
-        },
-        (err, sessions) => {
+        })
+        .then((user, err) => {
+            console.log("user found :", user);
             if (err) {
-                console.log(err);
                 return res.send({
                     success: false,
-                    message: "Error: Server error"
+                    message: "Error : server error"
                 });
             }
-            if (sessions.length != 1) {
-                return res.send({
-                    success: false,
-                    message: "Error: Invalid"
-                });
-            } else {
+            if (user) {
                 return res.send({
                     success: true,
-                    message: "Good"
-                });
+                    message: "A Person has been found",
+                    isTeacher: user.isTeacher
+                })
             }
-        }
-    );
+            return res.send({
+                success: false,
+                message: "A Person not found",
+            })
+
+        })
+        .catch(err => {
+            errors = "user does not exist";
+            console.warn(err);
+            return res.send({
+                success: false,
+                message: errors
+            });
+        });
 });
 
-module.exports = Router;
+module.exports = Router

@@ -14,10 +14,16 @@ export default class Dashboard extends Component {
             token: ""
         };
         this.logsign = this.logsign.bind(this);
+        this.onChange = this.onChange.bind(this);
+        this.onTeacherChange = this.onTeacherChange.bind(this);
     }
 
     componentDidMount() {
-        this.timerID = setInterval(() => this.tick(), 500);
+        this.setState({
+            isLoading: false,
+            isSignedin: false
+        })
+        // this.timerID = setInterval(() => this.tick(), 1000);
     }
     tick() {
         const obj = getFromStorage("the_main_app");
@@ -39,7 +45,7 @@ export default class Dashboard extends Component {
                         this.setState({
                             isLoading: false,
                             isSignedin: false
-                        });
+                        })
                     }
                 });
         }
@@ -47,13 +53,23 @@ export default class Dashboard extends Component {
             isLoading: false
         });
     }
+    onChange() {
+        this.setState(state => ({
+            isSignedin: !state.isSignedin
+        }));
+    }
+    onTeacherChange(e) {
+        this.setState(state => ({
+            isTeacher: e
+        }));
+    }
     logsign() {
         this.setState(state => ({
             isSigning: !state.isSigning
         }));
     }
     render() {
-        const { isLoading, isSigning, isSignedin } = this.state;
+        const { isLoading, isSigning, isSignedin, isTeacher } = this.state;
         if (isLoading) {
             return (
                 <div>
@@ -62,7 +78,7 @@ export default class Dashboard extends Component {
             );
         }
         if (isSignedin) {
-            return <h1>logged in</h1>;
+            return <h1>logged in as : {isTeacher ? "  a teacher" : "  a student"}</h1>;
         }
         return (
             <div className="container mx-5">
@@ -70,7 +86,7 @@ export default class Dashboard extends Component {
                 <button className="btn btn-primary" onClick={this.logsign}>
                     {isSigning ? "Login" : "Signin"}
                 </button>
-                <div className="main">{isSigning ? <Login /> : <Signup />}</div>
+                <div className="main">{isSigning ? <Login isSignedin={isSignedin} isTeacher={isTeacher} onTeacherChange={this.onTeacherChange} onNameChange={this.onChange} /> : <Signup />}</div>
                 <br />
             </div>
         );

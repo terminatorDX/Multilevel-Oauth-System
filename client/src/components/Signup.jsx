@@ -120,7 +120,7 @@ export default class Student extends Component {
                         <div className="signup-form">
                             <h2 className="form-title">Sign up</h2>
                             <h3 className="m-auto text-danger">
-                                {signUpError ? { signUpError } : null}
+                                {/* {signUpError ? { signUpError } : null} */}
                             </h3>
                             <form
                                 className="register-form"
