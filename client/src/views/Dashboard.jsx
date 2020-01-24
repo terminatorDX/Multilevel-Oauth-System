@@ -20,15 +20,11 @@ export default class Dashboard extends Component {
 
     componentDidMount() {
         this.setState({
-            isLoading: false,
-            isSignedin: false
+            isLoading: false
         })
-        // this.timerID = setInterval(() => this.tick(), 1000);
-    }
-    tick() {
         const obj = getFromStorage("the_main_app");
         if (obj && obj.token) {
-            console.log("inside the cdm of dashboard : ", obj);
+            console.log("inside the cdm of dashboard from localhost : ", obj);
             const { token } = obj;
             // Verify token that account previously stored is correct
             fetch(`${route}/api/account/verify?token=` + token)
@@ -39,7 +35,8 @@ export default class Dashboard extends Component {
                         this.setState({
                             token,
                             isLoading: false,
-                            isSignedin: true
+                            isSignedin: true,
+                            isTeacher: obj.teacher
                         });
                     } else {
                         this.setState({
@@ -49,9 +46,6 @@ export default class Dashboard extends Component {
                     }
                 });
         }
-        this.setState({
-            isLoading: false
-        });
     }
     onChange() {
         this.setState(state => ({

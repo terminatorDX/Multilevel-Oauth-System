@@ -59,7 +59,7 @@ export default class Student extends Component {
             .then(json => {
                 if (json.success) {
                     console.log("json in login.jsx", json);
-                    setInStorage("the_main_app", { token: json.token });
+                    setInStorage("the_main_app", { token: json.token, teacher: json.teacher });
                     this.props.onNameChange();
                     this.props.onTeacherChange(json.teacher)
                     this.setState({
