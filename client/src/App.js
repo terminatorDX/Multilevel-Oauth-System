@@ -12,7 +12,6 @@ function App() {
             <Switch>
                 <Route path="/" component={Dashboard} />
                 <Route path="/admin" render={props => <Admin {...props} />} />
-
                 <Route
                     path="/nonadmin"
                     render={props => <NonAdmin {...props} />}

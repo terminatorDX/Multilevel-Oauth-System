@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import Admin from '../layouts/Admin'
 import Signup from "../components/Signup";
 import Login from "../components/Login";
 import { getFromStorage } from "../utils/storage";
@@ -47,14 +48,14 @@ export default class Dashboard extends Component {
                 });
         }
     }
-    onChange() {
-        this.setState(state => ({
-            isSignedin: !state.isSignedin
-        }));
-    }
     onTeacherChange(e) {
         this.setState(state => ({
             isTeacher: e
+        }));
+    }
+    onChange() {
+        this.setState(state => ({
+            isSignedin: !state.isSignedin
         }));
     }
     logsign() {
@@ -71,8 +72,8 @@ export default class Dashboard extends Component {
                 </div>
             );
         }
-        if (isSignedin) {
-            return <h1>logged in as : {isTeacher ? "  a teacher" : "  a student"}</h1>;
+        if (isSignedin && isTeacher) {
+            return <Admin/>;
         }
         return (
             <div className="container mx-5">

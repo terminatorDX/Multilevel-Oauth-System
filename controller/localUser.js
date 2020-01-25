@@ -151,7 +151,6 @@ Router.get("/verify", (req, res, next) => {
             isDeleted: false
         })
         .then((user, err) => {
-            console.log("user found :", user);
             if (err) {
                 return res.send({
                     success: false,

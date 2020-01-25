@@ -60,8 +60,8 @@ export default class Student extends Component {
                 if (json.success) {
                     console.log("json in login.jsx", json);
                     setInStorage("the_main_app", { token: json.token, teacher: json.teacher });
+                    this.props.onTeacherChange(json.teacher);
                     this.props.onNameChange();
-                    this.props.onTeacherChange(json.teacher)
                     this.setState({
                         logInError: json.message,
                         isLoading: false,
@@ -94,7 +94,7 @@ export default class Student extends Component {
         if (token) {
             return (
                 <div className="bg-dark text-white">
-                    token in login :{token}
+                    tLogged in
                 </div>
             );
         }
