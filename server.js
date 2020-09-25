@@ -9,7 +9,8 @@ const express = require("express"),
     key = require("./key"),
     baseRoutes = require("./controller/baseRoutes"),
     PORT = process.env.port || 4000,
-    localUser = require("./controller/localUser");
+    localUser = require("./controller/localUser"),
+    mongoKey = key.mongodb.Local;
 
 app.use(cors());
 app.use(session({ secret: key.secret }));
@@ -24,7 +25,7 @@ app.use(
 );
 
 //mongodb
-mongoose.connect(key.mongodb.MLab, {
+mongoose.connect(mongoKey, {
     useNewUrlParser: true,
     useUnifiedTopology: true
 });

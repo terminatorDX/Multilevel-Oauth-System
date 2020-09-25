@@ -59,7 +59,10 @@ export default class Student extends Component {
             .then(json => {
                 if (json.success) {
                     console.log("json in login.jsx", json);
-                    setInStorage("the_main_app", { token: json.token, teacher: json.teacher });
+                    setInStorage("the_main_app", {
+                        token: json.token,
+                        teacher: json.teacher
+                    });
                     this.props.onTeacherChange(json.teacher);
                     this.props.onNameChange();
                     this.setState({
@@ -78,12 +81,7 @@ export default class Student extends Component {
             });
     }
     render() {
-        const {
-            isLoading,
-            logInName,
-            logInPassword,
-            token
-        } = this.state;
+        const { isLoading, logInName, logInPassword, token } = this.state;
         if (isLoading) {
             return (
                 <div>
@@ -92,11 +90,7 @@ export default class Student extends Component {
             );
         }
         if (token) {
-            return (
-                <div className="bg-dark text-white">
-                    tLogged in
-                </div>
-            );
+            return <div className="bg-dark text-white">Logged in</div>;
         }
         return (
             <section className="login" id="sign-up">
@@ -110,7 +104,8 @@ export default class Student extends Component {
                             <form
                                 className="register-form"
                                 id="register-form"
-                                onSubmit={this.onLogIn}>
+                                onSubmit={this.onLogIn}
+                            >
                                 <div className="form-group">
                                     <input
                                         type="text"
@@ -140,7 +135,8 @@ export default class Student extends Component {
                                         type="submit"
                                         name="login"
                                         id="login"
-                                        className="form-submit">
+                                        className="form-submit"
+                                    >
                                         Log In
                                     </button>
                                 </div>

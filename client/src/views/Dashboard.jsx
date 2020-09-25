@@ -10,18 +10,19 @@ class Dashboard extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            isLoading: true,
+            isLoading: false,
             isSigning: true,
             isTeacher: false,
             isSignedin: false,
             token: ""
         };
         this.logsign = this.logsign.bind(this);
-        this.onChange = this.onChange.bind(this);
+        this.onNameChange = this.onNameChange.bind(this);
         this.onTeacherChange = this.onTeacherChange.bind(this);
     }
 
     componentDidMount() {
+        document.title = "Login";
         const obj = getFromStorage("the_main_app");
         if (obj && obj.token) {
             console.log("inside the cdm of dashboard from localhost : ", obj);
@@ -48,11 +49,9 @@ class Dashboard extends Component {
         }
     }
     onTeacherChange(e) {
-        this.setState(state => ({
-            isTeacher: e
-        }));
+        this.setState({ isTeacher: e });
     }
-    onChange() {
+    onNameChange() {
         this.setState(state => ({
             isSignedin: !state.isSignedin
         }));
@@ -91,11 +90,7 @@ class Dashboard extends Component {
     render() {
         const { isLoading, isSigning, isSignedin, isTeacher } = this.state;
         if (isLoading) {
-            return (
-                <div>
-                    <p>Loading...</p>
-                </div>
-            );
+            return <p>Loading...</p>;
         }
         if (isSignedin) {
             if (isTeacher) {
@@ -126,7 +121,7 @@ class Dashboard extends Component {
                             isSignedin={isSignedin}
                             isTeacher={isTeacher}
                             onTeacherChange={this.onTeacherChange}
-                            onNameChange={this.onChange}
+                            onNameChange={this.onNameChange}
                         />
                     ) : (
                         <Signup />
